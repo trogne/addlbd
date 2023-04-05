@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> <record xmlns="http://www.loc.gov/MARC21/slim">
+<leader>00000n   a2200000   4500</leader>
+<controlfield tag="004">oclcnum</controlfield>
+<datafield tag="595" ind1=" " ind2=" ">
+	<subfield code="a">TestslangProquest</subfield>
+</datafield>
+<datafield tag="935" ind1=" " ind2=" ">
+	<subfield code="a">oclcnum</subfield>
+</datafield>
+<datafield tag="940" ind1=" " ind2=" ">
+	<subfield code="a">U3Q</subfield>
+</datafield>
+</record>                                               
