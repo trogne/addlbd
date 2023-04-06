@@ -54,28 +54,26 @@ def updateLbd(metadatanen, token):
     return update
 
 
+with open('meta.xml', 'r') as f:
+    metadata = f.read()
 # take identifiers from stdin
 for ocn in sys.stdin:
-    # print(ocn)
-    with open('meta.xml', 'r') as f:
-        metadata = f.read()
-        # response = requests.post(url, headers=headers, data=metadata)
-        metadatanew = metadata.replace('oclcnum', str(ocn.strip()))    
+    metadatanew = metadata.replace('oclcnum', str(ocn.strip()))    
 
-        try:
-            response = updateLbd(metadatanew, TOKEN)
-        except ValueError:
-            # token has expired, get a fresh token and redo search
-            print('getting new token')
-            TOKEN = getToken()
-            response = updateLbd(metadatanew, TOKEN)
+    try:
+        response = updateLbd(metadatanew, TOKEN)
+    except ValueError:
+        # token has expired, get a fresh token and redo search
+        print('getting new token')
+        TOKEN = getToken()
+        response = updateLbd(metadatanew, TOKEN)
 
 
-        if response.status_code == 201:
-            # Record created successfully
-            # responsetext = response.text
-            print(f'Created new record with OCLC number: {ocn}')
-        else:
-            # Record creation failed
-            # print(f'Record creation failed with status code {response.status_code}: {response.text}')
-            print(f'Record creation failed with status code {response.status_code}: {ocn}')
+    if response.status_code == 201:
+        # Record created successfully
+        # responsetext = response.text
+        print(f'Created new record with OCLC number: {ocn}')
+    else:
+        # Record creation failed
+        # print(f'Record creation failed with status code {response.status_code}: {response.text}')
+        print(f'Record creation failed with status code {response.status_code}: {ocn}')
