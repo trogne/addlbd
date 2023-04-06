@@ -24,7 +24,6 @@ authheader  = { 'Authorization' : 'Basic %s' %  authenc.decode() }
 url         = "https://oauth.oclc.org/token?grant_type=client_credentials&scope=WorldCatMetadataAPI"
 
 def getToken():
-
     try:
         r = requests.post(url, headers=authheader)
         r.raise_for_status()
@@ -35,11 +34,10 @@ def getToken():
 
 TOKEN = getToken()
 
-def updateLbd(metadatanen, token):
-
+def updateLbd():
     url = 'https://worldcat.org/lbd/data'
 
-    headers = {'Authorization': f'Bearer {token}',
+    headers = {'Authorization': f'Bearer {TOKEN}',
            'Content-Type': 'application/vnd.oclc.marc21+xml'}
 
     try:
@@ -61,19 +59,14 @@ for ocn in sys.stdin:
     metadatanew = metadata.replace('oclcnum', str(ocn.strip()))    
 
     try:
-        response = updateLbd(metadatanew, TOKEN)
+        response = updateLbd()
     except ValueError:
-        # token has expired, get a fresh token and redo search
         print('getting new token')
         TOKEN = getToken()
-        response = updateLbd(metadatanew, TOKEN)
+        response = updateLbd()
 
 
     if response.status_code == 201:
-        # Record created successfully
-        # responsetext = response.text
-        print(f'Created new record with OCLC number: {ocn}')
+        print(f'Created new LBD for OCLC {ocn}')
     else:
-        # Record creation failed
-        # print(f'Record creation failed with status code {response.status_code}: {response.text}')
         print(f'Record creation failed with status code {response.status_code}: {ocn}')
